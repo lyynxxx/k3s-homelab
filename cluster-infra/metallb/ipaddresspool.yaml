@@ -1,3 +1,4 @@
+# Metallb address pool
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
@@ -6,7 +7,10 @@ metadata:
 spec:
   addresses:
   - 192.168.69.88/32
-  autoAssign: false
+  avoidBuggyIPs: true
+  serviceAllocation:
+    namespaces:
+      - traefik-system
 ---
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
@@ -16,5 +20,7 @@ metadata:
 spec:
   addresses:
   - 192.168.69.90/32
-  autoAssign: false
-
+  avoidBuggyIPs: true
+  serviceAllocation:
+    namespaces:
+      - traefik-system

@@ -4,7 +4,7 @@ metadata:
   name: metallb-infra
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -12,4 +12,3 @@ spec:
   prune: true
   wait: true
   timeout: 5m
-

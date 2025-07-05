@@ -8,14 +8,20 @@ spec:
   chart:
     spec:
       chart: metallb
-      version: "0.15.4"
+      version: "0.15.2"
       sourceRef:
         kind: HelmRepository
         name: metallb
         namespace: flux-system
   install:
     createNamespace: true
+    crds: CreateReplace
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace 
   values:
+    crds:
+      enabled: true
     controller:
       logLevel: info
     speaker:

@@ -43,20 +43,6 @@ spec:
       - "--entryPoints.dashboard.proxyProtocol.insecure=true"
 
     ports:
-      web:
-        port: 80
-        expose:
-          default: true
-        exposedPort: 80
-      websecure:
-        port: 443
-        expose:
-          default: true
-        exposedPort: 443
-      traefik:
-        port: 8080
-        expose:
-          default: false
       # Add the dashboard port you defined
       dashboard:
         port: 9000

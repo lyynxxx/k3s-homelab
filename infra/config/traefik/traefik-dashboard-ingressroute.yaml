@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard
+  namespace: traefik-system
+spec:
+  entryPoints:
+    - dashboard
+  routes:
+  - match: "Host(`traefik.dashboard.local`)"
+    kind: Rule
+    services:
+    - name: api@internal
+      kind: TraefikService
+    middlewares:
+    - name: dashboard-ipwhitelist

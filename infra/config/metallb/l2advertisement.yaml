@@ -1,0 +1,10 @@
+# L2 configuration
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: traefik-only-adv
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - traefik-ingress
+  - traefik-dashboard

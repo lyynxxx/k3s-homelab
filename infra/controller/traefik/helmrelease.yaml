@@ -45,17 +45,21 @@ spec:
     ports:
       web:
         port: 80
-        expose: true
+        expose:
+          default: true
         exposedPort: 80
       websecure:
         port: 443
-        expose: true
+        expose:
+          default: true
         exposedPort: 443
       traefik:
         port: 8080
-        expose: false
+        expose:
+          default: false
       # Add the dashboard port you defined
       dashboard:
         port: 9000
-        expose: true
+        expose:
+          default: true
         exposedPort: 9000

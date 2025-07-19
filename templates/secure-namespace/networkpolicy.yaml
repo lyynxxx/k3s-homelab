@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: isolate-namespace
+  namespace: ${namespace_name}
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          environment: core
+  egress:
+  # DNS
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - port: 53
+      protocol: UDP
+  # Database (if needed)
+  - to:
+    - ipBlock:
+        cidr: ${database_ip}/32
+    ports:
+    - port: ${database_port}
+      protocol: TCP
+  # External services (optional)
+  - to:
+    - ipBlock:
+        cidr: ${external_access_cidr}
+    ports:
+    - port: 80
+      protocol: TCP
+    - port: 443
+      protocol: TCP
+
+## Allow incoming traffic only from "core" namespaces and limit outgoung traffic to internal DNS queries

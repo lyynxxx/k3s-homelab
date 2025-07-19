@@ -13,4 +13,5 @@ spec:
   prune: true
   wait: true
   dependsOn:
+    - name: helm-repositories # Wait for the Helm repositories
     - name: traefik-infra  # Wait for MetalLB + its config

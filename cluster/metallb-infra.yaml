@@ -12,3 +12,5 @@ spec:
   prune: true
   wait: true
   timeout: 5m
+  dependsOn:
+    - name: helm-repositories # Wait for the Helm repositories

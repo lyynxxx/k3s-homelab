@@ -32,7 +32,7 @@ This line etches a binding spell into your shell’s arcane tome (.bashrc), ensu
 And this one? A charm of brevity, reducing the mighty yet often mistyped kubectl to a single keystroke: k. Because real mages don’t waste time on extra letters when the pods are burning and the logs are pouring like rain.
 > echo "alias k=kubectl" >> .bashrc  
 
-*A small confession from the homelab archives: all this wizardry runs under the all-powerful root user. Yes, yes, it’s not exactly professional, and somewhere a security engineer just felt a disturbance in the Force. But in this realm, the goal is not to impress auditors; it's to eliminate terminal toil entirely. Once the cluster is summoned, all magic flows through Git - commit, push, and the occasional desperate revert are the only incantations we truly need.*  
+*A small confession from the homelab archives: all this wizardry runs under the all-powerful root user. Yes, yes, it’s not exactly professional, and somewhere a security engineer just felt a disturbance in the Force. But in this realm, the goal is not to impress auditors; it's to eliminate terminal toil entirely. Once the cluster is summoned, all magic flows through Git - commit, push, and the occasional desperate revert are the only incantations we truly need. We are trying to understand and learn the principle only!*  
 
 
 With the first node enthroned and the control plane awakened, it was time to summon the others - NODE2, NODE3... and NODEX. These were not mere workers, but full-fledged server nodes, sworn to share the burden of etcd and uphold the sacred uptime pact. Their role: reinforce the cluster’s spine, provide high availability, and—when things inevitably break—quietly suffer with dignity.

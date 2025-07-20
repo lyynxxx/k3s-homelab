@@ -83,5 +83,5 @@ This AutoYaST profile is your golden scroll: repeatable, reliable, and terrifyin
 To begin the ritual, you’ll need to summon the openSUSE Leap 15.6 installation ISO from https://get.opensuse.org/leap/15.6/ (as of writing these lines... may there is a newer version, when you read this)  
 Use the Network Image if you prefer minimal boot clutter and faster downloads. Burn it to a USB stick or mount it as a virtual CD in your favorite hypervisor (KVM, VirtualBox, Proxmox — pick your poison). Boot your machine or VM with the ISO, and prepare to feed it the AutoYaST file like a config-hungry beast. Also, you need a web server, to host the xml file.
 
-![boot the ISO](https://assets.digitalocean.com/articles/alligator/boo.svg "boot the ISO")
+!(https://github.com/lyynxxx/k3s-homelab/blob/main/autoyast/img/01-bootloader.png)
 

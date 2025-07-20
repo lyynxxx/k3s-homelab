@@ -85,3 +85,12 @@ Use the Network Image if you prefer minimal boot clutter and faster downloads. B
 
 ![boot](img/01-bootloader.png)
 
+Press the "I know this better"... I mean "e" button, to edit the boot kernel paramters, you shold see something similar.
+
+![boot](img/02-edit.png)
+
+Add "autoyast=http://yourwebserver/path/to/node1.xml"
+
+![boot](img/03.add_params.png)
+
+Press Ctrl+x to boot and pray.

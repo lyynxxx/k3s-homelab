@@ -40,7 +40,7 @@ Verify it works:
 sops --version
 ```
 
-## Generate a GPG Key
+### a) Generate a GPG Key
 
 If you don’t already have a GPG keypair, generate one now:
 
@@ -67,9 +67,17 @@ gpg --list-secret-keys "${KEY_NAME}"
 
 The long string (the fingerprint) is what you’ll use to tell SOPS who can decrypt secrets.
 
+### b) Use [age](https://github.com/FiloSottile/age)
+age is a simple, modern and secure file encryption tool, format, and Go library. It's recommended to use age over PGP, if possible.  
+It features small explicit keys, no config options, and UNIX-style composability. 
+
+age-keygen -o secrets/age-key.txt
+..TODO
+
+
 ## Create a .sops.yaml Configuration File
 
-To make your secret handling reproducible and automatic, add a .sops.yaml config to the root of your GitOps repo:
+To make your secret handling reproducible and automatic, add a .sops.yaml config to your $HOME folder of your local machine:
 
 ```yaml
 # homelab-gitops/.sops.yaml
@@ -77,7 +85,34 @@ creation_rules:
   - path_regex: .*secret.*\.yaml$
     encrypted_regex: ^(data|stringData)$
     pgp: 71D663880FD6A35AD0B490CAD88AC9106AECCE2F  # Your fingerprint
+    age: 
 ```
+
+
+Let’s break down this arcane glyph:
+ - path_regex: .*secret.*\.yaml$ — This tells SOPS to watch all files with "secret" in the name and ending in .yaml. It doesn’t matter where they hide — in secrets/, cluster/, or buried in /mnt/yaml/mordor/doom/ — if they smell like secrets, they shall be encrypted.  
+ - encrypted_regex: ^(data|stringData)$ — This narrows SOPS's power: it only encrypts the data and stringData fields, where Kubernetes secrets usually stash their precious values. This means the rest of the file (metadata, kind, etc.) remains visible for GitOps and version control—visible structure, hidden content.  
+ - pgp: 71D6...CE2F — This is the GPG fingerprint of the key used to lock and unlock your secrets. Think of it as your magical sigil—only those who hold the matching private key may reveal what lies within the encrypted scrolls.
 
 ## Create and Encrypt Your First Secret
 
+It all starts with a simple secret, where we want to store the login credentials of the Archmage.
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-secret
+  namespace: default
+type: Opaque
+stringData:
+  username: admin
+  password: super-secret-password
+```
+
+Use your prefered text editor and save the file for example: secrets/my-secret.yaml  
+And now encrypt it.
+```bash
+sops -e -i secrets/my-secret.yaml
+```
+
+After this, open the file and admire the magical ciphertext—your cluster will later decrypt it, but it’s unreadable to mere mortals.

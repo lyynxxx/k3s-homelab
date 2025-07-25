@@ -1,19 +1,19 @@
 # Directory Structure (not in alphabetical order...)
-├── README.md : ❗ YOU ARE HERE <---
-├── cluster : dominium of FluxCD. After bootstrap this is the folder, where FluxCD lives.
-├── helmrepositories : all the source definitions we plan to use in our cluster with FluxCD.
-├── infra : manifests for our core infrastructure only (Traefik, MetalLB, cert-manager)
-│   ├── config : different infra related configs, like: Traefik middleware, custom services with ip filter, MetalLB pool definitions, etc.
-│   └── controller : namespace definition, HelmRelease installation with custom values for infra elements
-├── secrets : our encrypted secrets, organized per namespace
-│   └──<namespace>
-├── templates : FluxCD templates (for example reusable, isolated namespace definition)
-├── apps : all the app definitions
-└── docs: lastly, the archives... all the suffering and magic
-	├── 1_autoyast : Swing your wand and auto-deply openSuse, install the k3s cluster
-	├── 2_cluster : The birth of FluxCD, to rule them all
-	├── 3_sops : Storing passwords and sensitive data in encrypted secrets, in Git.
-	└── 4_apps : And the fun begins... let's host our apps
+├── README.md : ❗ YOU ARE HERE <---  
+├── cluster : dominium of FluxCD. After bootstrap this is the folder, where FluxCD lives.  
+├── helmrepositories : all the source definitions we plan to use in our cluster with FluxCD.  
+├── infra : manifests for our core infrastructure only (Traefik, MetalLB, cert-manager)  
+│   ├── config : different infra related configs, like: Traefik middleware, custom services with ip filter, MetalLB pool definitions, etc.  
+│   └── controller : namespace definition, HelmRelease installation with custom values for infra elements  
+├── secrets : our encrypted secrets, organized per namespace  
+│   └──<namespace>  
+├── templates : FluxCD templates (for example reusable, isolated namespace definition)  
+├── apps : all the app definitions  
+└── docs: lastly, the archives... all the suffering and magic  
+	├── 1_autoyast : Swing your wand and auto-deply openSuse, install the k3s cluster  
+	├── 2_cluster : The birth of FluxCD, to rule them all  
+	├── 3_sops : Storing passwords and sensitive data in encrypted secrets, in Git.  
+	└── 4_apps : And the fun begins... let's host our apps  
 
 # k3s-homelab
 Welcome to my GitOps-powered lab of (mostly) controlled Kubernetes chaos! This repo documents my thrilling descent into managing a K3s cluster with FluxCD, where MetalLB, Traefik, and Cert-Manager all try their best not to explode at the same time. If YAML is your love language and you believe in the GitOps prophecy of "everything as code," you're in the right dimension. Expect battle scars, and the occasional commented-out cry for help.

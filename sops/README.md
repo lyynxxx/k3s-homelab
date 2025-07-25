@@ -1,8 +1,5 @@
 Before you unleash Flux to rule your cluster, a word of caution from the DevOps grimoires: **never** commit passwords, tokens, or secrets — not even to private Git repos. Just because your repo is hidden behind a password or an access token doesn’t mean it’s safe from leaks, mistakes, or that one teammate who accidentally pushes everything to the wrong remote. As Master Yoda once said: Git is many things, but secure vault it is not!
 
-*There’s something undeniably beautiful about learning new things — especially in the world of infrastructure, where every new tool or technique feels like unlocking a fresh layer of reality. It’s a strange kind of thrill: the excitement of cracking a complex problem, the adrenaline rush when something finally works, and yes, even the despair of debugging YAML that stares back at you with silent judgment. This path will take you into dark places - broken containers, lost packets, and mysterious logs — but with every stumble, you gain wisdom, confidence, and scars that quietly whisper “I’ve seen some real sht!” And while your future self may not remember every flag or workaround, your CV absolutely will. Because what starts as curiosity often ends as capability, and there's real power in being the person who can say, “Yeah, I’ve automated that.”*
-
-
 ## [SOPS - https://getsops.io/](https://getsops.io/)
 
 In the world of GitOps, where every configuration lives in a Git repository like a holy relic, we face a crucial dilemma: what do we do with secrets? Passwords, API tokens, TLS keys — all the juicy bits we don’t want publicly version-controlled, but still need for our cluster to run. This is where SOPS (Secrets OPerationS) steps in like a cryptographic guardian angel. Created by Mozilla, SOPS allows you to encrypt specific values inside YAML, JSON, ENV, or INI files, and store those encrypted files safely in your Git repo. Your Git history stays clean and trackable, and your secrets stay unreadable to all but the chosen ones — usually your cluster and you.
@@ -193,3 +190,66 @@ Then, apply it to your cluster as a Kubernetes secret, in the same namespace whe
 ```bash
 kubectl create secret generic sops-gpg --namespace=flux-system --from-file=sops.asc=flux-secrets.asc
 ```
+
+From now on, Flux recognizes your encrypted secret by the presence of a magical glyph—specifically, the sops: metadata block embedded in the YAML file. When it sees this enchanted signature, it knows, “Ah, this is no ordinary config… this one is sealed.” Then it invokes SOPS during reconciliation, decrypts the values using your sops-gpg secret, and applies the result as if it had always known the password. No special annotation, no secret handshake—just proper encryption and a key in the right place.
+
+(Assuming all the secrets are in the secrets/<namespace/> fodler structure and target namespace is defined in the secret manifest. Place this into the cluster folder, where you connect all the other Kustomization objects to Flux)
+
+```yaml
+# k3s-homelab/cluster/secrets.yaml
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: secrets
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./secrets
+  prune: true
+  wait: true
+  timeout: 5m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-gpg
+  dependsOn:
+    - name: helm-repositories # Wait for at least the Helm repositories
+    ```
+
+This tells Flux:
+ - "Check the ./secrets folder every minute."
+ - "Use the sops-gpg secret to decrypt things."
+ - "Apply everything into the default namespace."
+ - "And if I remove a file from Git, remove it from the cluster too (prune: true)."
+
+
+The final binding — a sacred connection between your secrets/ folder and Flux, so your encrypted secrets are always watched, decrypted, and applied without you lifting a terminal finger. And after a few seconds...
+
+```bash
+k3s1:~ # k get secrets
+NAME        TYPE     DATA   AGE
+my-secret   Opaque   2      19s
+
+
+k3s1:~ # k get secret my-secret -o yaml
+apiVersion: v1
+data:
+  password: c3VwZXItc2VjcmV0LW1hZ2ljYWwtcGFzc3dvcmQ=
+  username: YWRtaW4=
+kind: Secret
+metadata:
+  creationTimestamp: "2025-07-25T10:10:26Z"
+  labels:
+    kustomize.toolkit.fluxcd.io/name: secrets
+    kustomize.toolkit.fluxcd.io/namespace: flux-system
+  name: my-secret
+  namespace: default
+  resourceVersion: "6170661"
+  uid: 5d295e92-139d-492f-9c6b-289559d1dc57
+type: Opaque
+```
+
+*There’s something undeniably beautiful about learning new things — especially in the world of infrastructure, where every new tool or technique feels like unlocking a fresh layer of reality. It’s a strange kind of thrill: the excitement of cracking a complex problem, the adrenaline rush when something finally works, and yes, even the despair of debugging YAML that stares back at you with silent judgment. This path will take you into dark places - broken containers, lost packets, and mysterious logs — but with every stumble, you gain wisdom, confidence, and scars that quietly whisper “I’ve seen some real sht!” And while your future self may not remember every flag or workaround, your CV absolutely will. Because what starts as curiosity often ends as capability, and there's real power in being the person who can say, “Yeah, I’ve automated that.”*

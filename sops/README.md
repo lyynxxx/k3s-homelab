@@ -60,7 +60,7 @@ gpg --list-secret-keys "${KEY_NAME}"
 
 The long string (the fingerprint) is what you’ll use to tell SOPS who can decrypt secrets.
 
-### b) Use [age](https://github.com/FiloSottile/age)
+### b) WIP_Use [age (https://github.com/FiloSottile/age)](https://github.com/FiloSottile/age)
 age is a simple, modern and secure file encryption tool, format, and Go library. It's recommended to use age over PGP, if possible.  
 It features small explicit keys, no config options, and UNIX-style composability. Just like SOPS, most OS repos contains it and you can install simply with zypper, pacman, rpm, etc.
 
@@ -73,7 +73,7 @@ age-keygen -o secrets/age-key.txt
 To make your secret handling reproducible and automatic, add a .sops.yaml config to your $HOME folder of your local machine:
 
 ```yaml
-# homelab-gitops/.sops.yaml
+# $HOME/.sops.yaml
 creation_rules:
   - path_regex: .*secret.*\.yaml$
     encrypted_regex: ^(data|stringData)$
@@ -81,8 +81,8 @@ creation_rules:
     age: 
 ```
 
-Let’s break down this arcane glyph:
- - path_regex: .*secret.*\.yaml$ — This tells SOPS to watch all files with "secret" in the name and ending in .yaml. It doesn’t matter where they hide — in secrets/, cluster/, or buried in /mnt/yaml/mordor/doom/ — if they smell like secrets, they shall be encrypted.  
+So, in this arcane glyph:
+ - path_regex: .*secret.*\.yaml$ — This tells SOPS to watch all files with "secret" in the name and ending in .yaml. It doesn’t matter where they hide — in secrets/, cluster/, or buried in /mnt/yaml/mordor/doom/ — if they smell like secrets, they shall be encrypted.    
  - encrypted_regex: ^(data|stringData)$ — This narrows SOPS's power: it only encrypts the data and stringData fields, where Kubernetes secrets usually stash their precious values. This means the rest of the file (metadata, kind, etc.) remains visible for GitOps and version control—visible structure, hidden content.  
  - pgp: 71D6...CE2F — This is the GPG fingerprint of the key used to lock and unlock your secrets. Think of it as your magical sigil—only those who hold the matching private key may reveal what lies within the encrypted scrolls.
 
@@ -90,6 +90,7 @@ Let’s break down this arcane glyph:
 
 It all starts with a simple secret, where we want to store the login credentials of the Archmage.
 ```yaml
+# ../secrets/default/my-secret.yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -101,13 +102,13 @@ stringData:
   password: super-secret-magical-password
 ```
 
-Use your prefered text editor and save the file for example: secrets/my-secret.yaml  
+Use your prefered text editor and save the file for example: secrets/default/my-secret.yaml  
 And now encrypt it.
 ```bash
-sops -e -i secrets/my-secret.yaml
+sops -e -i secrets/default/my-secret.yaml
 ```
 
-After this, open the file and admire the magical ciphertext—your cluster will later decrypt it, but it’s unreadable to mere mortals.
+After this, open the file and admire the magical ciphertext — your cluster will later decrypt it, but it’s unreadable to mere mortals.
 ```bash
 $ cat my-secret.yaml 
 apiVersion: v1
@@ -147,22 +148,15 @@ sops:
     version: 3.10.2
 ```
 
-
-Edit an encrypted file (SOPS handles encrypt/decrypt), make changes in your editor, saves encrypted automatically!
+SOPS handles the encrypt/decrypt procedure, to make changes and save encrypted automatically, use:
 ```bash
-sops apps/redmine/redmine-secrets.yaml
+sops secrets/default/my-secret.yaml.
 ```
 
 
 ### What happens, when you need to edit secrets but don't have the key?
 
 Well... 
-
-```bash
-$ sops -e -i my-secret.yaml
-Could not generate data key: [failed to encrypt new data key with master key "71D663880FD6A35AD0B490CAD88AC9106AECCE2F": could not encrypt data key with PGP key: github.com/ProtonMail/go-crypto/openpgp error: key with fingerprint '71D663880FD6A35AD0B490CAD88AC9106AECCE2F' is not available in keyring; GnuPG binary error: failed to encrypt sops data key with pgp: gpg: 71D663880FD6A35AD0B490CAD88AC9106AECCE2F: skipped: No public key
-gpg: [stdin]: encryption failed: No public key]
-```
 
 When you try to edit secrets without the key, the encrypted YAML just stares back at you — cold, unreadable, and mocking your lack of magical credentials. You can push changes, sure... but your cluster won’t decrypt them, and Flux will quietly ignore your feeble mortal scribbles.
 
@@ -191,9 +185,9 @@ Then, apply it to your cluster as a Kubernetes secret, in the same namespace whe
 kubectl create secret generic sops-gpg --namespace=flux-system --from-file=sops.asc=flux-secrets.asc
 ```
 
-From now on, Flux recognizes your encrypted secret by the presence of a magical glyph—specifically, the sops: metadata block embedded in the YAML file. When it sees this enchanted signature, it knows, “Ah, this is no ordinary config… this one is sealed.” Then it invokes SOPS during reconciliation, decrypts the values using your sops-gpg secret, and applies the result as if it had always known the password. No special annotation, no secret handshake—just proper encryption and a key in the right place.
+From now on, Flux recognizes your encrypted secret by the presence of a magical glyph — specifically, the sops: metadata block embedded in the YAML file. When it sees this enchanted signature, it knows, "Ah, this is no ordinary config… this one is sealed." Then it invokes SOPS during reconciliation, decrypts the values using your sops-gpg secret, and applies the result as if it had always known the password. No special annotation, no secret handshake—just proper encryption and a key in the right place.
 
-(Assuming all the secrets are in the secrets/<namespace/> fodler structure and target namespace is defined in the secret manifest. Place this into the cluster folder, where you connect all the other Kustomization objects to Flux)
+The final binding — a sacred connection between your secrets/ folder and Flux, so your encrypted secrets are always watched, decrypted, and applied without you lifting a terminal finger.
 
 ```yaml
 # k3s-homelab/cluster/secrets.yaml
@@ -220,13 +214,12 @@ spec:
     ```
 
 This tells Flux:
- - "Check the ./secrets folder every minute."
+ - "Check the ./secrets folder every 10 minute."
  - "Use the sops-gpg secret to decrypt things."
- - "Apply everything into the default namespace."
+ - "Apply everything into the defined namespace."
  - "And if I remove a file from Git, remove it from the cluster too (prune: true)."
 
-
-The final binding — a sacred connection between your secrets/ folder and Flux, so your encrypted secrets are always watched, decrypted, and applied without you lifting a terminal finger. And after a few seconds...
+ And after a few seconds...
 
 ```bash
 k3s1:~ # k get secrets

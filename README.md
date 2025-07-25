@@ -7,14 +7,15 @@
 │   ├── config : different infra related configs, like: Traefik middleware, custom services with ip filter, MetalLB pool definitions, etc.  
 │   └── controller : namespace definition, HelmRelease installation with custom values for infra elements  
 ├── secrets : our encrypted secrets, organized per namespace  
-│   └──<namespace>  
+│   └── <namespace>  
 ├── templates : FluxCD templates (for example reusable, isolated namespace definition)  
 ├── apps : all the app definitions  
 └── docs: lastly, the archives... all the suffering and magic  
-	├── 1_autoyast : Swing your wand and auto-deply openSuse, install the k3s cluster  
+	├── 1_autoyast : Swing your wand and auto-deply openSuse nodes  
 	├── 2_cluster : The birth of FluxCD, to rule them all  
 	├── 3_sops : Storing passwords and sensitive data in encrypted secrets, in Git.  
-	└── 4_apps : And the fun begins... let's host our apps  
+	├── 4_infra : Install and configure all the core infrastructure.  
+	└── 5_apps : And the fun begins... let's host our apps  
 ```
 
 # k3s-homelab
@@ -43,3 +44,5 @@ From this moment on, Git is the single source of truth, and git commit is your w
 *There’s something undeniably beautiful about learning new things — especially in the world of infrastructure, where every new tool or technique feels like unlocking a fresh layer of reality. It’s a strange kind of thrill: the excitement of cracking a complex problem, the adrenaline rush when something finally works, and yes, even the despair of debugging YAML that stares back at you with silent judgment. This path will take you into dark places - broken containers, lost packets, and mysterious logs — but with every stumble, you gain wisdom, confidence, and scars that quietly whisper "I’ve seen some real sht!" And while your future self may not remember every flag or workaround, your CV absolutely will. Because what starts as curiosity often ends as capability, and there's real power in being the person who can say, "Yeah, I’ve automated that."*  
 
 *...but at this point... my mana is spent, my scrolls are smoldering, and even my staff refuses to stand upright. Let the logs roll where they may — I must rest, or risk turning into a null reference myself.*
+
+> [:arrow_right: **Step 4: Core infrastructure:** __WIP. ](docs/4_infra)

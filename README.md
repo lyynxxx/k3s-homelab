@@ -37,7 +37,7 @@ That said, once you venture beyond the comforting chaos of your homelab and into
 
 From this moment on, Git is the single source of truth, and git commit is your wand. Welcome to the age of true GitOps, or dare I say... welcome to the "I want GitOps but I don't want my passwords on GitHub" club! 😄
 
-> [:arrow_right: **Step 3: Encrypting secrets:** A double invocation of power — K3s awakens the cluster’s heart, and FluxCD binds it to the Git-bound plane, where manifests rule and kubectl becomes but a backup spell....](docs/3_sops)
+> [:arrow_right: **Step 3: Encrypting secrets:** Arcane Discipline of the GitOps Order. Once learned, it grants effortless control over encrypted secrets, with the precision of a master scribe. ](docs/3_sops)
 
 
 *There’s something undeniably beautiful about learning new things — especially in the world of infrastructure, where every new tool or technique feels like unlocking a fresh layer of reality. It’s a strange kind of thrill: the excitement of cracking a complex problem, the adrenaline rush when something finally works, and yes, even the despair of debugging YAML that stares back at you with silent judgment. This path will take you into dark places - broken containers, lost packets, and mysterious logs — but with every stumble, you gain wisdom, confidence, and scars that quietly whisper "I’ve seen some real sht!" And while your future self may not remember every flag or workaround, your CV absolutely will. Because what starts as curiosity often ends as capability, and there's real power in being the person who can say, "Yeah, I’ve automated that."*  

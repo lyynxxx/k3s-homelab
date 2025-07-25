@@ -27,7 +27,7 @@ My preferred OS of choice is openSUSE. openSUSE makes a rock-solid foundation fo
 
 *Disclaimer, adventurer: I chose openSUSE for this quest because I like it, and I have... creative disagreements with RHEL... IBM (very, very much so). But whether you ride with Debian, Arch (which btw I use too :) ), or some cursed RPM-based fork, which is inside the Matrix - you know, the support one - and stuff works, the principles of GitOps remain the same. Use the distro you love, slay your cluster demons your own way—the outcome is what truly matters.*
 
-> :arrow_right: **Step 1: AutoYast:** A mystical rite that breathes life into metal, conjures fully armed and operational nodes from the void, no clicks, no questions, just pure scripted destiny. Let us begin the first incantation...
+> [:arrow_right: **Step 1: AutoYast:** A mystical rite that breathes life into metal, conjures fully armed and operational nodes from the void, no clicks, no questions, just pure scripted destiny. Let us begin the first incantation...](docs/1_autoyast)
 
 A three-node server cluster hits the sweet spot for a homelab - it’s just enough to simulate the glorious chaos of a real Kubernetes environment without needing a data center or sacrificing your living room to racks and fans. With embedded etcd cluster, you get the real control plane experience in all its distributed, high-availability glory, minus the overhead of running an external etcd stack that requires more ceremony than a royal wedding. It’s stable, it behaves (mostly), and it lets you break things with impunity while still teaching you what a production-grade system *feels* like. Think of it as Kubernetes on "medium heat" - hot enough to burn you, but not enough to melt your face off.
 

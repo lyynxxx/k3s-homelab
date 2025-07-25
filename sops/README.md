@@ -211,7 +211,7 @@ spec:
       name: sops-gpg
   dependsOn:
     - name: helm-repositories # Wait for at least the Helm repositories
-    ```
+```
 
 This tells Flux:
  - "Check the ./secrets folder every 10 minute."

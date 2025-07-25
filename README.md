@@ -1,4 +1,5 @@
 # Directory Structure (not in alphabetical order...)
+```bash
 ├── README.md : ❗ YOU ARE HERE <---  
 ├── cluster : dominium of FluxCD. After bootstrap this is the folder, where FluxCD lives.  
 ├── helmrepositories : all the source definitions we plan to use in our cluster with FluxCD.  
@@ -14,6 +15,7 @@
 	├── 2_cluster : The birth of FluxCD, to rule them all  
 	├── 3_sops : Storing passwords and sensitive data in encrypted secrets, in Git.  
 	└── 4_apps : And the fun begins... let's host our apps  
+```
 
 # k3s-homelab
 Welcome to my GitOps-powered lab of (mostly) controlled Kubernetes chaos! This repo documents my thrilling descent into managing a K3s cluster with FluxCD, where MetalLB, Traefik, and Cert-Manager all try their best not to explode at the same time. If YAML is your love language and you believe in the GitOps prophecy of "everything as code," you're in the right dimension. Expect battle scars, and the occasional commented-out cry for help.

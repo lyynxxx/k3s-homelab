@@ -1,3 +1,20 @@
+# Directory Structure (not in alphabetical order...)
+├── README.md : ❗ YOU ARE HERE <---
+├── cluster : dominium of FluxCD. After bootstrap this is the folder, where FluxCD lives.
+├── helmrepositories : all the source definitions we plan to use in our cluster with FluxCD.
+├── infra : manifests for our core infrastructure only (Traefik, MetalLB, cert-manager)
+│   ├── config : different infra related configs, like: Traefik middleware, custom services with ip filter, MetalLB pool definitions, etc.
+│   └── controller : namespace definition, HelmRelease installation with custom values for infra elements
+├── secrets : our encrypted secrets, organized per namespace
+│   └──<namespace>
+├── templates : FluxCD templates (for example reusable, isolated namespace definition)
+├── apps : all the app definitions
+└── docs: lastly, the archives... all the suffering and magic
+	├── 1_autoyast : Swing your wand and auto-deply openSuse, install the k3s cluster
+	├── 2_cluster : The birth of FluxCD, to rule them all
+	├── 3_sops : Storing passwords and sensitive data in encrypted secrets, in Git.
+	└── 4_apps : And the fun begins... let's host our apps
+
 # k3s-homelab
 Welcome to my GitOps-powered lab of (mostly) controlled Kubernetes chaos! This repo documents my thrilling descent into managing a K3s cluster with FluxCD, where MetalLB, Traefik, and Cert-Manager all try their best not to explode at the same time. If YAML is your love language and you believe in the GitOps prophecy of "everything as code," you're in the right dimension. Expect battle scars, and the occasional commented-out cry for help.
 FluxCD keeps everything synchronized like a slightly neurotic librarian, and Helm releases are the dusty grimoires of this digital dungeon. Contributions, spells, and debugging rituals welcome... but maybe too late.
@@ -8,14 +25,11 @@ My preferred OS of choice is openSUSE. openSUSE makes a rock-solid foundation fo
 
 *Disclaimer, adventurer: I chose openSUSE for this quest because I like it, and I have... creative disagreements with RHEL... IBM (very, very much so). But whether you ride with Debian, Arch (which btw I use too :) ), or some cursed RPM-based fork, which is inside the Matrix - you know, the support one - and stuff works, the principles of GitOps remain the same. Use the distro you love, slay your cluster demons your own way—the outcome is what truly matters.*
 
-To avoid the ancient ritual of clicking "Next" a thousand times, I summoned the great [AutoYaST](https://doc.opensuse.org/documentation/leap/autoyast/single-html/book-autoyast/index.html) to preordain the fate of my nodes. With one sacred XML file, I scripted the full metal resurrection of each machine — disks partitioned with surgical precision, packages hand-picked like artisanal cheese, and system settings carved in stone before the OS even had a chance to ask questions. The installer didn't just boot, it *complied*, silently crafting perfect little minions without bothering me for a single keyboard stroke. Automation is beautiful when it obeys. (I detail this in the autoyast folder)
-
-By the time the first boot was done, my nodes emerged like trained warhorses at the ready - configured, networked, SSH-ready, and morally prepared for the burden of running Kubernetes. No extra tinkering, no post-install patch-fu, no "oops I forgot to install curl" drama. Just pure, industrial-grade repeatability. Honestly, if your infra doesn't greet you with "Sir, I'm ready to sync with FluxCD and stuff" on first boot, are you even doing your job right?
+> :arrow_right: **Step 1: AutoYast:** A mystical rite that breathes life into metal, conjures fully armed and operational nodes from the void, no clicks, no questions, just pure scripted destiny. Let us begin the first incantation...
 
 A three-node server cluster hits the sweet spot for a homelab - it’s just enough to simulate the glorious chaos of a real Kubernetes environment without needing a data center or sacrificing your living room to racks and fans. With embedded etcd cluster, you get the real control plane experience in all its distributed, high-availability glory, minus the overhead of running an external etcd stack that requires more ceremony than a royal wedding. It’s stable, it behaves (mostly), and it lets you break things with impunity while still teaching you what a production-grade system *feels* like. Think of it as Kubernetes on "medium heat" - hot enough to burn you, but not enough to melt your face off.
 
 That said, once you venture beyond the comforting chaos of your homelab and into the wild world of enterprise clusters, you’d best leave the training wheels behind. Following best practices in production isn’t just a checkbox — it’s the difference between “Oops, my blog is down” and “Khm... Houston we have a problem... I just cost the company $300k in SLA penalties.” So yes, three server nodes only is perfect for learning the ropes, or host a few, non critical apps, but if you take it to EE production, may your pager be loud and your coffee strong and have dedicated master and worker nodes, node taints and other advanced magic.
-
 
 ### Assuming "The Nodes" are up and running in their desired, init state...
 

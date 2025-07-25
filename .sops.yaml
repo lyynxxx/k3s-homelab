@@ -1,5 +1,0 @@
-# homelab-gitops/.sops.yaml
-creation_rules:
-  - path_regex: .*secret.*\.yaml$
-    encrypted_regex: ^(data|stringData)$
-    pgp: 71D663880FD6A35AD0B490CAD88AC9106AECCE2F  # Your fingerprint

@@ -10,18 +10,3 @@ spec:
       port: 80
       targetPort: 80
       protocol: TCP
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: vaultwarden
-  namespace: app-vaultwarden
-spec:
-  entryPoints:
-    - web   # http (Traefik default entrypoint)
-  routes:
-    - match: Host(`passwds.local`)
-      kind: Rule
-      services:
-        - name: vaultwarden
-          port: 80

@@ -11,15 +11,17 @@ spec:
       targetPort: 80
       protocol: TCP
 ---
-apiVersion: v1
-kind: Service
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   name: vaultwarden
   namespace: app-vaultwarden
 spec:
-  selector:
-    app: vaultwarden
-  ports:
-    - port: 80        # Service port
-      targetPort: 80  # Pod containerPort
-      protocol: TCP
+  entryPoints:
+    - web   # http (Traefik default entrypoint)
+  routes:
+    - match: Host(`passwds.local`)
+      kind: Rule
+      services:
+        - name: vaultwarden
+          port: 80

@@ -8,6 +8,10 @@ spec:
   selector:
     matchLabels:
       app: vaultwarden
+  template:
+    metadata:
+      labels:
+        app: vaultwarden
     spec:
       containers:
         - name: "vaultwarden"

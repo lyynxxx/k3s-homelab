@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vaultwarden
-  namespace: vaultwarden
+  namespace: app-vaultwarden
 spec:
   replicas: 1
   selector:
@@ -15,12 +15,9 @@ spec:
     spec:
       containers:
         - name: vaultwarden
-          image: vaultwarden/server:latest
+          image: docker.io/vaultwarden/server:1.25.1-alpine
           ports:
             - containerPort: 80
           env:
             - name: ADMIN_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: vaultwarden-secret
-                  key: adminToken
+              value: "test-admin-token"

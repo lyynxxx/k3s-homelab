@@ -14,12 +14,12 @@ spec:
         app: vaultwarden
     spec:
       containers:
-        - name: "vaultwarden"
-          image: "docker.io/vaultwarden/server:1.25.1-alpine"
+        - name: vaultwarden
+          image: docker.io/vaultwarden/server:1.25.1-alpine
           ports:
             - containerPort: 80
           env:
-            - name: "ADMIN_TOKEN"
+            - name: ADMIN_TOKEN
               value: "test-admin-token"
-            - name: "I_REALLY_WANT_VOLATILE_STORAGE"
+            - name: I_REALLY_WANT_VOLATILE_STORAGE
               value: "true"

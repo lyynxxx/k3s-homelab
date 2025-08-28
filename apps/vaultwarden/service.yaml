@@ -4,7 +4,8 @@ metadata:
   name: vaultwarden
   namespace: app-vaultwarden
 spec:
-  type: ClusterIP
+  selector:
+    app: vaultwarden
   ports:
     - name: dashboard
       port: 80

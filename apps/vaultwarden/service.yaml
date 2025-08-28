@@ -10,3 +10,16 @@ spec:
       port: 80
       targetPort: 80
       protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vaultwarden
+  namespace: app-vaultwarden
+spec:
+  selector:
+    app: vaultwarden
+  ports:
+    - port: 80        # Service port
+      targetPort: 80  # Pod containerPort
+      protocol: TCP

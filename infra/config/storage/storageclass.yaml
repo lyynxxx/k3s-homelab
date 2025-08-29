@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-zfs
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: 10.15.15.1   # hypervisor's private bridge IP
+  share: /issd/k3s-volumes
+reclaimPolicy: Retain
+volumeBindingMode: Immediate

@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: longhorn-dashboard
+  namespace: longhorn-system
+spec:
+  entryPoints:
+    - dashboard
+  routes:
+  - match: "Host(`longhorn.dashboard.local`)"
+    kind: Rule
+    services:
+    - name: longhorn-frontend
+      kind: Rule
+    middlewares:
+    - name: dashboard-ipwhitelist

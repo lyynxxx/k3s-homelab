@@ -5,3 +5,5 @@ resources:
   - traefik.yaml
   - metallb.yaml
   - cert-manager.yaml
+  - longhorn.yaml
+

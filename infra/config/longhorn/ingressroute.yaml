@@ -11,6 +11,6 @@ spec:
     kind: Rule
     services:
     - name: longhorn-frontend
-      kind: service
+      kind: Service
     middlewares:
     - name: dashboard-ipwhitelist

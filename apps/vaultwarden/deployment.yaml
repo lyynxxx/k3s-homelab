@@ -23,10 +23,3 @@ spec:
               value: "test-admin-token"
             - name: I_REALLY_WANT_VOLATILE_STORAGE
               value: "true"
-          volumeMounts:
-          - name: data
-            mountPath: /data
-        volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: vaultwarden-data

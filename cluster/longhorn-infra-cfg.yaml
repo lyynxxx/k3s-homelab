@@ -1,7 +1,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: storage-config
+  name: longhorn-config
   namespace: flux-system
 spec:
   interval: 10m
@@ -9,8 +9,8 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infra/config/storage
+  path: ./infra/config/longhorn
   prune: true
   wait: true
   dependsOn:
-    - name: metallb-infra
+    - name: longhorn-infra

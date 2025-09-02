@@ -21,5 +21,8 @@ spec:
           env:
             - name: ADMIN_TOKEN
               value: "test-admin-token"
-            - name: I_REALLY_WANT_VOLATILE_STORAGE
-              value: "true"
+#            - name: I_REALLY_WANT_VOLATILE_STORAGE
+#              value: "true"
+          volumeMounts:
+            - mountPath: "/data"
+              name: pvc-vaultwarden

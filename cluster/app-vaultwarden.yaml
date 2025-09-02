@@ -13,5 +13,4 @@ spec:
   prune: true
   wait: true
   dependsOn:
-    - name: helm-repositories # Wait for the Helm repositories
-    - name: metallb-config  # Wait for MetalLB + its config
+    - name: longhorn-config  ## wait till storage is available

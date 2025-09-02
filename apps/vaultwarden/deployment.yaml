@@ -8,10 +8,6 @@ spec:
   selector:
     matchLabels:
       app: vaultwarden
-  volumes:
-    - name: lh-vaultwarden
-      persistentVolumeClaim:
-        calimName: pvc-vaultwarden
   template:
     metadata:
       labels:
@@ -30,3 +26,7 @@ spec:
           volumeMounts:
             - mountPath: "/data"
               name: lh-vaultwarden
+      volumes:
+        - name: lh-vaultwarden
+          persistentVolumeClaim:
+            calimName: pvc-vaultwarden

@@ -14,3 +14,4 @@ spec:
   wait: true
   dependsOn:
     - name: longhorn-config  ## wait till storage is available
+#    - name: cert-manager-config  ## wait till cert-manager-config is readly

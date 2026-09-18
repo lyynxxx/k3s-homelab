@@ -1,0 +1,205 @@
+{
+  "product": {
+    "id": "openSUSE_Leap"
+  },
+
+  "hostname": {
+    "static": "node3.k3s"
+  },
+
+  "root": {
+    "hashedPassword": false,
+    "password": "changeit",
+    "sshPublicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAsCaKUzXes0z4WMqY8tQ9PsTEFmYVIyj7nYd4F9iZXSHZfDv6AbyCudGVXHdrdAe4VnMmoWVg6j8k546KQzFZ3bQl5UJdWrqulwCvFrH8yEyouqmA6OeSSAz7ALG85FBYiVWVKWrlzLqAIT/Gn+Ud57Pu3d4OowH00EXqksKdeux/eT+nyGuC7Je2ecvXLqETOhOJDhAicZf8SEcu5Rsbz7dEqZPnXC+4zfibqDuldzKDEkYL4Pyc4mcG+F15yxmW0OyjMLUI93kcgtmwXVKRPV2k0ceuqa7a3zlhbwae/ofgC7AwsUBZYdxxSfxmkGIXZYfoaN1PxiXj+aiMFdis5w=="
+  },
+
+  "localization": {
+    "language": "en_US.UTF-8",
+    "keyboard": "us",
+    "timezone": "Europe/Budapest"
+  },
+
+  "software": {
+    "patterns": [
+      "minimal_base",
+      "selinux"
+    ],
+    "onlyRequired": true,
+    "packages": [
+      "xfsprogs",
+      "openssh",
+      "mc",
+      "lvm2",
+      "kexec-tools",
+      "irqbalance",
+      "grub2",
+      "dosfstools",
+      "haveged",
+      "chrony",
+      "audit",
+      "htop",
+      "helm",
+      "curl",
+      "tar",
+      "which",
+      "vim",
+      "iptables",
+      "open-iscsi",
+      "e2fsprogs",
+      "audit-audispd-plugins",
+      "NetworkManager",
+      "container-selinux",
+      "selinux-autorelabel",
+      "checkpolicy"
+    ]
+  },
+
+  "network": {
+    "connections": [
+      {
+        "id": "eth0-static",
+        "interface": "eth0",
+        "method4": "manual",
+        "method6": "disabled",
+        "addresses": ["192.168.69.22/24"],
+        "gateway4": "192.168.69.254",
+        "nameservers": ["192.168.69.254"],
+        "autoconnect": true
+      }
+    ]
+  },
+
+  "bootloader": {
+    "timeout": 5,
+    "stopOnBootMenu": false,
+    "extraKernelParams": "mitigations=auto security=selinux selinux=1 ipv6.disable=1"
+  },
+
+  "storage": {
+    "drives": [
+      {
+        "search": "/dev/vda",
+        "ptableType": "gpt",
+        "partitions": [
+          {
+            "search": "*",
+            "delete": true
+          },
+
+          {
+            "size": "1 GiB",
+            "filesystem": {
+              "path": "/boot",
+              "type": "xfs"
+            }
+          },
+          {
+            "alias": "pv-system",
+            "id": "lvm",
+            "size": { "min": "1 GiB" }
+          }
+        ]
+      }
+    ],
+    "volumeGroups": [
+      {
+        "name": "system",
+        "physicalVolumes": ["pv-system"],
+        "logicalVolumes": [
+          {
+            "name": "root",
+            "size": "5 GiB",
+            "filesystem": {
+              "path": "/",
+              "type": "xfs"
+            }
+          },
+          {
+            "name": "home",
+            "size": "2 GiB",
+            "filesystem": {
+              "path": "/home",
+              "type": "xfs",
+              "mountOptions": ["nodev", "nosuid", "noexec", "noatime"]
+            }
+          },
+          {
+            "name": "tmp",
+            "size": "2 GiB",
+            "filesystem": {
+              "path": "/tmp",
+              "type": "xfs",
+              "mountOptions": ["nodev", "nosuid", "noexec", "noatime"]
+            }
+          },
+          {
+            "name": "usr",
+            "size": "4 GiB",
+            "filesystem": {
+              "path": "/usr",
+              "type": "xfs",
+              "mountOptions": ["nodev", "noatime"]
+            }
+          },
+          {
+            "name": "var",
+            "size": "5 GiB",
+            "filesystem": {
+              "path": "/var",
+              "type": "xfs",
+              "mountOptions": ["nodev", "nosuid"]
+            }
+          },
+          {
+            "name": "vartmp",
+            "size": "5 GiB",
+            "filesystem": {
+              "path": "/var/tmp",
+              "type": "xfs",
+              "mountOptions": ["nodev", "nosuid", "noexec"]
+            }
+          },
+          {
+            "name": "k3s",
+            "size": { "min": "30 GiB" },
+            "filesystem": {
+              "path": "/var/lib/rancher",
+              "type": "xfs",
+              "mountOptions": ["nodev"]
+            }
+          }
+        ]
+      }
+    ],
+    "boot": {
+      "configure": true
+    }
+  },
+
+  "scripts": {
+    "init": [
+      {
+        "name": "setup-services.sh",
+        "content": "#!/bin/bash\nsystemctl enable --now chronyd\nsystemctl enable --now haveged\nsystemctl enable --now irqbalance\nsystemctl enable --now iscsid\nsystemctl enable --now auditd\n"
+      },
+      {
+        "name": "setup-issue.sh",
+        "content": "#!/bin/bash\ncat > /etc/issue << 'EOF'\n*********************************************\n*  Authorized access only!                  *\n*  Unauthorized use is prohibited and will  *\n*  be prosecuted!                           *\n*********************************************\nEOF\n"
+      },
+      {
+        "name": "setup-sysctl.sh",
+        "content": "#!/bin/bash\ncat > /etc/sysctl.d/99-k3s.conf << 'EOF'\nnet.ipv4.ip_forward = 1\nnet.bridge.bridge-nf-call-iptables = 1\nnet.bridge.bridge-nf-call-ip6tables = 1\nEOF\nsysctl --system\n"
+      }
+    ]
+  },
+
+  "files": [
+    {
+      "destination": "/etc/chrony.d/ntp-hu.conf",
+      "content": "server 0.hu.pool.ntp.org iburst\nserver 1.hu.pool.ntp.org iburst\nserver 2.hu.pool.ntp.org iburst\nserver 3.hu.pool.ntp.org iburst\n",
+      "permissions": "0644",
+      "user": "root",
+      "group": "root"
+    }
+  ]
+}

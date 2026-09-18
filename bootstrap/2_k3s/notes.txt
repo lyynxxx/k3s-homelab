@@ -1,0 +1,31 @@
+pfSense tpc loadbalancing/virtual ip
+
+mkdir -p /etc/rancher/k3s
+openssl rand -hex 32
+
+------------------------------------------------
+# /etc/rancher/k3s/config.yaml
+# node1 - initial K3s server
+
+cluster-init: true
+
+token: "REPLACE_WITH_THE_RANDOM_TOKEN"
+
+tls-san:
+  - "192.168.69.10"
+
+flannel-backend: "none"
+disable-network-policy: true
+disable-kube-proxy: true
+
+disable:
+  - traefik
+  - servicelb
+
+------------------------------------------------
+
+curl -sfL https://get.k3s.io | \
+  INSTALL_K3S_VERSION='v1.36.4+k3s1' \
+  sh -
+
+systemctl status k3s

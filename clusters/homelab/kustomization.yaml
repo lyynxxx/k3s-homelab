@@ -6,3 +6,5 @@ resources:
   - ../../infrastructure/networking/cilium
   - gateway-api.yaml
   - traefik.yaml
+  - ../../apps/test/whoami
+

@@ -1,4 +1,4 @@
-# Directory Structure (not in alphabetical order...)
+# !!ARCHIVE  :::  Directory Structure (not in alphabetical order...)
 ```bash
 ├── README.md : ❗ YOU ARE HERE <---  
 ├── cluster : dominium of FluxCD. After bootstrap this is the folder, where FluxCD lives.  

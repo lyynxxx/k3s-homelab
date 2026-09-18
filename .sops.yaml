@@ -1,0 +1,5 @@
+## every file ending .sops.yaml, for example app.secrets.sops.yaml
+creation_rules:
+  - path_regex: .*\.sops\.ya?ml$
+    encrypted_regex: ^(data|stringData)$
+    age: age13yedd4hkqyxg9dmmua8hmaa6uz327p329dpznluycr3m9zczc4qsvyxnqt

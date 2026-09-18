@@ -1,0 +1,21 @@
+### AFTER Cilium!!!
+Additional nodes
+
+mkdir -p /etc/rancher/k3s
+
+# /etc/rancher/k3s/config.yaml
+# node2 - additional K3s server
+
+server: "https://192.168.69.10:6443"
+token: "SAME_TOKEN_AS_NODE1"
+
+tls-san:
+  - "192.168.69.10"
+
+flannel-backend: "none"
+disable-network-policy: true
+disable-kube-proxy: true
+
+disable:
+  - traefik
+  - servicelb

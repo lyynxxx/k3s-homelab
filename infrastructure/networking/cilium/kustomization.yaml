@@ -4,4 +4,3 @@ kind: Kustomization
 resources:
   - lb-ip-pool.yaml
   - l2-announcement-policy.yaml
-  - test

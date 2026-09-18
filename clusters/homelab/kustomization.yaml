@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - flux-system
   - ../../infrastructure/networking/cilium
+  - ../../infrastructure/gateway-api

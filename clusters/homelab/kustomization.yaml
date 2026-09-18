@@ -5,3 +5,4 @@ resources:
   - flux-system
   - ../../infrastructure/networking/cilium
   - gateway-api.yaml
+  - traefik.yaml

@@ -1,0 +1,34 @@
+helm repo add cilium https://helm.cilium.io/
+helm repo update
+
+helm search repo cilium/cilium --versions | head
+
+
+mkdir -p ~/k3s-bootstrap
+mcedit ~/k3s-bootstrap/cilium-values.yaml
+------------------------------------------------
+# Cilium provides the cluster CNI.
+# Kubernetes assigns a PodCIDR to each node; Cilium allocates
+# pod addresses from that node's assigned CIDR.
+ipam:
+  mode: kubernetes
+
+# Pod traffic between nodes is encapsulated using VXLAN.
+routingMode: tunnel
+tunnelProtocol: vxlan
+
+# Cilium/eBPF completely replaces kube-proxy.
+kubeProxyReplacement: true
+
+# Cilium must reach the Kubernetes API directly during bootstrap,
+# because kube-proxy is disabled.
+k8sServiceHost: "192.168.69.10"
+k8sServicePort: "6443"
+
+------------------------------------------------
+
+helm install cilium cilium/cilium \
+  --version 1.20.2 \
+  --namespace kube-system \
+  --kubeconfig /etc/rancher/k3s/k3s.yaml \
+  -f ~/k3s-bootstrap/cilium-values.yaml

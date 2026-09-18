@@ -16,16 +16,16 @@ spec:
         namespace: traefik
       interval: 12h
 
-values:
-  providers:
-    kubernetesGateway:
-      enabled: true
+  values:
+    providers:
+      kubernetesGateway:
+        enabled: true
 
-  gateway:
-    enabled: false
+    gateway:
+      enabled: false
 
-  service:
-    annotations:
-      lbipam.cilium.io/ips: "192.168.69.200"
-    spec:
-      type: LoadBalancer
+    service:
+      annotations:
+        lbipam.cilium.io/ips: "192.168.69.200"
+      spec:
+        type: LoadBalancer

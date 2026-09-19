@@ -6,5 +6,4 @@ resources:
   - ../../infrastructure/networking/cilium
   - gateway-api.yaml
   - traefik.yaml
-  - ../../apps/tests/whoami
-
+  - cert-manager.yaml
